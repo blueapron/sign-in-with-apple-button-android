@@ -5,7 +5,6 @@ import android.os.Parcel
 import android.os.Parcelable
 import androidx.fragment.app.FragmentManager
 import com.willowtreeapps.signinwithapplebutton.view.SignInWebViewDialogFragment
-import java.util.*
 
 class SignInWithAppleService(
     private val fragmentManager: FragmentManager,

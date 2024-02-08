@@ -20,6 +20,7 @@ class FormInterceptorInterface(
         val values = formData.split(FORM_DATA_SEPARATOR)
         val codeEncoded = values.find { it.startsWith(CODE_KEY) }
         val stateEncoded = values.find { it.startsWith(STATE_KEY) }
+        val idTokenEncoded = values.find { it.startsWith(ID_TOKEN_KEY) }
         val errorEncoded = values.find { it.startsWith(ERROR_KEY) }
 
         if (errorEncoded != null) {
@@ -34,17 +35,18 @@ class FormInterceptorInterface(
             return
         }
 
-        if (codeEncoded == null || stateEncoded == null) {
-            callback?.invoke(SignInWithAppleResult.Failure(IOException("The response did not contain state and/or code")))
+        if (codeEncoded == null || stateEncoded == null || idTokenEncoded == null) {
+            callback?.invoke(SignInWithAppleResult.Failure(IOException("The response did not contain one or any of state, code, or token")))
             return
         }
 
         val stateValue = stateEncoded.substringAfter(KEY_VALUE_SEPARATOR)
         val codeValue = codeEncoded.substringAfter(KEY_VALUE_SEPARATOR)
+        val idTokenValue = idTokenEncoded.substringAfter(KEY_VALUE_SEPARATOR)
 
         callback?.invoke(
             if (stateValue == expectedState)
-                SignInWithAppleResult.Success(codeValue)
+                SignInWithAppleResult.Success(codeValue, idTokenValue)
             else
                 SignInWithAppleResult.Failure(IOException("The response's state does not match the expected state."))
         )
@@ -54,6 +56,7 @@ class FormInterceptorInterface(
         const val NAME = "FormInterceptorInterface"
         private const val STATE_KEY = "state"
         private const val CODE_KEY = "code"
+        private const val ID_TOKEN_KEY = "id_token"
         private const val ERROR_KEY = "error"
         private const val CANCELLED_VALUE = "user_cancelled_authorize"
         private const val FORM_DATA_SEPARATOR = "|"
