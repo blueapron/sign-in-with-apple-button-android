@@ -78,7 +78,7 @@ class FormInterceptorInterface(
                     form.elements[i].value +
                     '${FORM_DATA_SEPARATOR}'
             }
-            window.${NAME}.processFormData(values);
+            $NAME.processFormData(values);
         }
 
         for(var i=0 ; i< document.forms.length ; i++){
