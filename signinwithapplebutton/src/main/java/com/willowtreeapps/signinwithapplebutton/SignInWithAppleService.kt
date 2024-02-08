@@ -70,7 +70,7 @@ class SignInWithAppleService(
                 val authenticationUri = Uri
                     .parse("https://appleid.apple.com/auth/authorize")
                     .buildUpon().apply {
-                        appendQueryParameter("response_type", "code")
+                        appendQueryParameter("response_type", "code id_token")
                         appendQueryParameter("client_id", configuration.clientId)
                         appendQueryParameter("redirect_uri", configuration.redirectUri)
                         appendQueryParameter("scope", configuration.scope)
